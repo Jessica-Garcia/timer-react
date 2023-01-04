@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
-import { Home } from './pages/Home'
-import { History } from './pages/History'
+import { Routes, Route } from "react-router-dom";
+import { Home } from "./pages/Home";
+import { History } from "./pages/History";
 
 export function Router() {
   return (
@@ -8,5 +8,5 @@ export function Router() {
       <Route path="/" element={<Home />} />
       <Route path="/history" element={<History />} />
     </Routes>
-  )
+  );
 }
