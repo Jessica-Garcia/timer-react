@@ -37,7 +37,17 @@ export function Home() {
   const { register, handleSubmit, watch, reset } = useForm<newCycleFormData>({
     resolver: zodResolver(newCycleFormValidationSchema),
   });
+
+  const task = watch("task");
+  const isTaskFulfilled = task;
+
   const activeCycle = cycles.find((cicle) => cicle.id === activeCycleId);
+  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
+  const currentSeconds = activeCycle ? totalSeconds - amountMinutesPassed : 0;
+  const minutesAmount = Math.floor(currentSeconds / 60);
+  const secondsAmount = currentSeconds % 60;
+  const minutes = String(minutesAmount).padStart(2, "0");
+  const seconds = String(secondsAmount).padStart(2, "0");
 
   useEffect(() => {
     let interval: number;
@@ -55,6 +65,12 @@ export function Home() {
     };
   }, [activeCycle]);
 
+  useEffect(() => {
+    if (activeCycle) {
+      document.title = `${minutes}:${seconds}`;
+    }
+  }, [minutes, seconds, activeCycle]);
+
   function handleCreateNewCycle(inputsData: newCycleFormData) {
     const newCycle: Cycle = {
       id: String(new Date().getTime()),
@@ -68,18 +84,6 @@ export function Home() {
     setAmountMinutesPassed(0);
     reset();
   }
-
-  const task = watch("task");
-  const isTaskFulfilled = task;
-
-  const totalSeconds = activeCycle ? activeCycle.minutesAmount * 60 : 0;
-  const currentSeconds = activeCycle ? totalSeconds - amountMinutesPassed : 0;
-
-  const minutesAmount = Math.floor(currentSeconds / 60);
-  const secondsAmount = currentSeconds % 60;
-
-  const minutes = String(minutesAmount).padStart(2, "0");
-  const seconds = String(secondsAmount).padStart(2, "0");
 
   return (
     <HomeContainer>
